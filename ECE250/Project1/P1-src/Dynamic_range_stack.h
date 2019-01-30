@@ -91,48 +91,116 @@ Dynamic_range_stack::~Dynamic_range_stack() {
 
 int Dynamic_range_stack::top() const {
 	// Enter your implementation here.
-	return 0;
+	int t = stack_array[entry_count];
+	return t ;
 }
 
 int Dynamic_range_stack::maximum() const {
 	// Enter your implementation here.
-	return 0;
+	int max = maximum_array[max_count-1];
+	return max;
 }
 
 int Dynamic_range_stack::minimum() const {
 	// Enter your implementation here.
-	return 0;
+	int min = minimum_array[min_count-1];
+	return min;
 }
 
 int Dynamic_range_stack::size() const {
 	// Enter your implementation here.
-	return 0;
+	return entry_count;
 }
 
 bool Dynamic_range_stack::empty() const {
 	// Enter your implementation here.
-	return 0;
+	if (entry_count == 0){
+		return 1;
+	}else
+	{
+		return 0;
+	}	
 }
 
 int Dynamic_range_stack::capacity() const {
 	// Enter your implementation here.
-	return 0;
+	return current_capacity;
 }
 
 
 
 void Dynamic_range_stack::push( int const &obj ) {
-	// Enter your implementation here.
+	// Enter your implementation here.]
+	//check if the current stack is full
+	if (entry_count == current_capacity){
+		
+		int *new_array = new int[2*current_capacity];
+		int *new_max_array = new int[2*current_capacity];
+		int *new_min_array = new int[2*current_capacity];
+
+		for (int i = 0; i < current_capacity; i++){
+			new_array[i] = stack_array[i];
+			new_max_array[i] = maximum_array[i];
+			new_min_array[i] = minimum_array[i];
+		}
+
+		delete[] stack_array;
+		delete[] maximum_array;
+		delete[] minimum_array;
+
+		stack_array = new_array;
+		maximum_array = new_max_array;
+		minimum_array = new_min_array;
+		current_capacity = 2*current_capacity;
+	}
+	stack_array[entry_count] = obj;
+	entry_count ++;
+	//push to max stack
+
+	int y = maximum();
+	if (obj >= y){
+		maximum_array[max_count] = obj;
+	}else{
+		maximum_array[max_count] = y;
+	}
+	max_count ++;
+
+	int y = minimum();
+	if (obj <= y){
+		minimum_array[min_count] = obj;
+	} else{
+		minimum_array[min_count] = y;
+	}
+	min_count ++;
 	return;
 }
 
 int Dynamic_range_stack::pop() {
 	// Enter your implementation here.
-	return 0;
+	int t = top();
+	entry_count --;
+	max_count --;
+	min_count --;
+	return t;
 }
 
 void Dynamic_range_stack::clear() {
 	// Enter your implementation here.
+	if (initial_capacity != current_capacity){
+		
+		int *new_array = new int[initial_capacity];
+		int *new_max_array = new int[initial_capacity];
+		int *new_min_array = new int[initial_capacity];
+
+		delete[] stack_array;
+		delete[] maximum_array;
+		delete[] minimum_array;
+		
+		stack_array = new_array;
+		maximum_array = new_max_array;
+		minimum_array = new_min_array;
+		current_capacity = 2*current_capacity;
+	}
 }
 
 // You can modify this function however you want:  it will not be tested
