@@ -91,7 +91,7 @@ Dynamic_range_stack::~Dynamic_range_stack() {
 
 int Dynamic_range_stack::top() const {
 	// Enter your implementation here.
-	int t = stack_array[entry_count];
+	int t = stack_array[entry_count-1];
 	return t ;
 }
 
@@ -165,7 +165,7 @@ void Dynamic_range_stack::push( int const &obj ) {
 	}
 	max_count ++;
 
-	int y = minimum();
+	 y = minimum();
 	if (obj <= y){
 		minimum_array[min_count] = obj;
 	} else{
