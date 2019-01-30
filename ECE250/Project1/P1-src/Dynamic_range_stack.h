@@ -86,23 +86,37 @@ minimum_array( new int[current_capacity] ) {
 
 Dynamic_range_stack::~Dynamic_range_stack() {
 	// Enter your implementation here.
-
+	delete[] maximum_array;
+	delete[] minimum_array;
+	delete[] stack_array;
 }
 
 int Dynamic_range_stack::top() const {
 	// Enter your implementation here.
+	if (empty() == 1){
+		throw underflow();
+		return 0;
+	}
 	int t = stack_array[entry_count-1];
 	return t ;
 }
 
 int Dynamic_range_stack::maximum() const {
 	// Enter your implementation here.
+	if (empty() == 1){
+		throw underflow();
+		return 0;
+	}
 	int max = maximum_array[max_count-1];
 	return max;
 }
 
 int Dynamic_range_stack::minimum() const {
 	// Enter your implementation here.
+	if (empty() == 1){
+		throw underflow();
+		return 0;
+	}
 	int min = minimum_array[min_count-1];
 	return min;
 }
@@ -157,7 +171,14 @@ void Dynamic_range_stack::push( int const &obj ) {
 	entry_count ++;
 	//push to max stack
 
-	int y = maximum();
+	int y = 0;
+
+	if (max_count > 0){
+		y = maximum_array[max_count-1];
+	}else{
+		y = obj;
+	}
+
 	if (obj >= y){
 		maximum_array[max_count] = obj;
 	}else{
@@ -165,12 +186,18 @@ void Dynamic_range_stack::push( int const &obj ) {
 	}
 	max_count ++;
 
-	 y = minimum();
+	if (min_count > 0){
+		y = minimum_array[min_count -1];
+	}else{
+		y = obj;
+	}
+	
 	if (obj <= y){
 		minimum_array[min_count] = obj;
 	} else{
 		minimum_array[min_count] = y;
 	}
+
 	min_count ++;
 	return;
 }
@@ -199,7 +226,7 @@ void Dynamic_range_stack::clear() {
 		stack_array = new_array;
 		maximum_array = new_max_array;
 		minimum_array = new_min_array;
-		current_capacity = 2*current_capacity;
+		current_capacity = initial_capacity;
 	}
 }
 
