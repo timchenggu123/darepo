@@ -47,7 +47,7 @@ class DoubleHashTable {
 template<typename T >
 DoubleHashTable<T >::DoubleHashTable( int m ):
 count( 0 ), power( m ),
-array_size( 1 << power ),
+array_size( 1 << power ) ,//left shift
 array( new T [array_size] ),
 array_state( new state[array_size] ) {
 
@@ -64,18 +64,21 @@ DoubleHashTable<T >::~DoubleHashTable() {
 template<typename T >
 int DoubleHashTable<T >::size() const {
     // enter your implemetation here 
-	return 0;
+	return count;
 }
 
 template<typename T >
 int DoubleHashTable<T >::capacity() const {
     // enter your implemetation here 
-	return 0;
+	return array_size;
 }
 
 template<typename T >
 bool DoubleHashTable<T >::empty() const {
     // enter your implemetation here 
+	if (count == 0){
+		return true;
+	}
 	return false;
 }
 
