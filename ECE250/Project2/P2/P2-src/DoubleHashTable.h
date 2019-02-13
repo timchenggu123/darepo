@@ -58,7 +58,8 @@ array_state( new state[array_size] ) {
 
 template<typename T >
 DoubleHashTable<T >::~DoubleHashTable() {
-	// enter your implemetation here 
+	delete[] array;
+	delete[] array_state;
 }
 
 template<typename T >
@@ -82,9 +83,9 @@ bool DoubleHashTable<T >::empty() const {
 template<typename T >
 int DoubleHashTable<T >::h1( T const &obj ) const {
 	int temp  = static_cast<int> (obj);
-	temp = temp % power;
+	temp = temp % array_size;
 	if (temp < 0) {
-		temp = temp + power;
+		temp = temp + array_size;
 	}
 
 	return temp;
@@ -92,10 +93,10 @@ int DoubleHashTable<T >::h1( T const &obj ) const {
 
 template<typename T >
 int DoubleHashTable<T >::h2( T const &obj ) const {
-	int temp = h1(obj);
+	int temp = static_cast<int> (obj/array_size);
 	temp = h1(temp);
 	if ((temp % 2) == 0) {
-		temp = temp + 1
+		temp = temp + 1;
 	}
 	return temp;
 }
@@ -108,11 +109,11 @@ bool DoubleHashTable<T >::member( T const &obj ) const {
 	int h1_k = h1(obj);
 	int h2_k = h2(obj);
 	int i = 0;
-	while (array_state[(h1_k + i * h2_k) % array_size] != 0) {
+	while (array_state[(h1_k + i * h2_k) % array_size] != EMPTY) {
 		if (i == array_size) {
 			break;
 		}
-		if (array_state[(h1_k + i * h2_k) % array_size] == -1) {
+		if (array_state[(h1_k + i * h2_k) % array_size] == DELETED) {
 			i++;
 			continue;
 		}
@@ -135,20 +136,21 @@ T DoubleHashTable<T >::bin( int n ) const {
 template<typename T >
 void DoubleHashTable<T >::insert( T const &obj ) {
 	if (count == array_size) {
-		throw overflow;
+		throw overflow();
 	}
 	int h1_k = h1(obj);
 	int h2_k = h2(obj);
 	int i = 0;
-	while (array_state[(h1_k + i  * h2_k) % array_size] != 1) {
+	while (array_state[(h1_k + i  * h2_k) % array_size] == OCCUPIED) {
 		i++;
 		if (i == array_size) {
-			return
+			std::cout<<std::string("cannot insert")<<std::endl;
+			return;
 		}
 	}
 
 	array[(h1_k + i * h2_k) % array_size] = obj;
-	array_state[(h1_k + i * h2_k) % array_size] = 1;
+	array_state[(h1_k + i * h2_k) % array_size] = OCCUPIED;
 	count++;
 
 	 return ; 
@@ -162,11 +164,11 @@ bool DoubleHashTable<T >::remove( T const &obj ) {
 	int h1_k = h1(obj);
 	int h2_k = h2(obj);
 	int i = 0;
-	while (array_state[(h1_k + i * h2_k) % array_size] != 0) {
+	while (array_state[(h1_k + i * h2_k) % array_size] != EMPTY) {
 		if (i == array_size) {
 			break;
 		}
-		if (array_state[(h1_k + i * h2_k) % array_size] == -1) {
+		if (array_state[(h1_k + i * h2_k) % array_size] == DELETED) {
 			i++;
 			continue;
 		}
@@ -174,7 +176,7 @@ bool DoubleHashTable<T >::remove( T const &obj ) {
 			i++;
 			continue;
 		}
-		array_state[(h1_k + i * h2_k) % array_size] == -1;
+		array_state[(h1_k + i * h2_k) % array_size] = DELETED;
 		count = count - 1;
 		return true;
 	}
@@ -184,7 +186,7 @@ bool DoubleHashTable<T >::remove( T const &obj ) {
 template<typename T >
 void DoubleHashTable<T >::clear() {
 	for (int i = 0; i < array_size; i++) {
-		array_state[i] == 0;
+		array_state[i] == EMPTY;
 	 }
 	 return ; 
 }
@@ -192,7 +194,9 @@ void DoubleHashTable<T >::clear() {
 //Print function won't be tested
 template<typename T >
 void DoubleHashTable<T >::print() const {
-      // enter your implemetation here 	
+      for (int i = 0; i < array_size; i ++){
+		  std::cout << array_state[i] << std::endl;
+	  }
 	return;
 }
 
