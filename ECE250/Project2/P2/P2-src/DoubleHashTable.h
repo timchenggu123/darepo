@@ -188,6 +188,7 @@ void DoubleHashTable<T >::clear() {
 	for (int i = 0; i < array_size; i++) {
 		array_state[i] == EMPTY;
 	 }
+	 count = 0;
 	 return ; 
 }
 
@@ -197,7 +198,7 @@ void DoubleHashTable<T >::print() const {
       for (int i = 0; i < array_size; i ++){
 		  std::cout << array_state[i] << std::endl;
 	  }
-	return;
+		return;
 }
 
 #endif
