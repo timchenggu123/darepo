@@ -99,24 +99,25 @@ bool Trie_node::member(std::string const &str, int depth) const
 bool Trie_node::insert(std::string const &str, int depth)
 {
 	if (depth == str.length())
-	{
+	{	
+		if (is_terminal){
+			return false;
+		}
 		this -> is_terminal = true;
-		std::cout<<is_terminal<<std::endl;
 		return true;
 	}
 	int index = (int)str[depth];
 	index = index - 65;
-		std::cout<<child(index)<<std::endl;
 	if (child(index) == nullptr)
 	{
-			std::cout<<1<<std::endl;
 		if (children == nullptr)
 		{
 			children = new Trie_node *[CHARACTERS];
-				std::cout<<2<<std::endl;
+			for (int i = 0; i < 26; i++){
+				children[i] = nullptr;
+			}
 		}
 		children[index] = new Trie_node();
-			std::cout<<3<<std::endl;
 		return child(index)->insert(str, ++depth);
 	}else
 	{
@@ -127,17 +128,14 @@ bool Trie_node::insert(std::string const &str, int depth)
 }
 
 bool Trie_node::erase(std::string const &str, int depth, Trie_node *&ptr_to_this)
-{
+{	bool branching_node = false;
 	if (depth == str.length())
 	{	
 		if (is_terminal)
 		{
-			std::cout<<ptr_to_this<<std::endl;
 			if (children == nullptr)
 			{
-				std::cout<<ptr_to_this<<std::endl;
-				ptr_to_this->clear();
-				return true;
+				return false;
 
 			}
 			else
@@ -161,10 +159,21 @@ bool Trie_node::erase(std::string const &str, int depth, Trie_node *&ptr_to_this
 			}
 			if (count > 1)
 			{
-				ptr_to_this = this; //pointer to branching point;
+				branching_node = true; //pointer to branching point;
 			}
 		}
-		return child(index)->erase(str, ++depth, ptr_to_this);
+		if (child(index)->erase(str, ++depth, ptr_to_this)){
+			return true;
+		}else
+		{
+			if(branching_node)	{
+				child(index) -> clear();
+				children[index] = nullptr;
+				return true;
+			}
+			return false;
+		}
+		;
 	}
 	return false;
 }
@@ -175,9 +184,9 @@ void Trie_node::clear()
 	{
 		for (int i = 0; i < 26; i++)
 		{
-			std::cout<<i<<std::endl;
 			if (children[i] != nullptr){
 				children[i]->clear();
+				delete children[i];
 			}
 		}
 		delete[] children;
