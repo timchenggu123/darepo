@@ -73,22 +73,43 @@ Trie::~Trie() {
 }
 
 int Trie::size() const {
-	return 0;
+	return size;
 }
 
 bool Trie::empty() const {
+	if(size == 0){
+		return true;
+	}
 	return false;
 }
 
 Trie_node *Trie::root() const {
-	return nullptr;
+	return root_node;
 }
 
 bool Trie::member( std::string const &str ) const {
-	return false;
+	if (root() == nullptr){
+		return false;
+	}
+	for (char &c:str){
+		c = toupper(c);
+		code = (int) c;
+		if ( c <65 || c >90){
+			return false;
+		}
+	}
+	return root_node->member(str,0);
 }
 
 bool Trie::insert( std::string const &str ) {
+	for (char &c:str){
+		c = toupper(c);
+		code = (int) c;
+		if ( c <65 || c >90){
+			return false;
+		}
+	}
+	
 	return false;
 }
 
@@ -97,6 +118,9 @@ bool Trie::erase( std::string const &str ) {
 }
 
 void Trie::clear() {
+	if(root()!= nullptr){
+		root() -> clear();
+	}
 }
 
 // You can modify this function however you want:  it will not be tested

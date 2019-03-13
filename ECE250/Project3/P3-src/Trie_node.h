@@ -41,7 +41,7 @@ class Trie_node {
 		Trie_node **children;
 		bool is_terminal;
 		static int const CHARACTERS = 26;
-
+		int str2index(std::string &str);
 
 	public:
 		Trie_node();
@@ -75,11 +75,30 @@ Trie_node *Trie_node::child( int n ) const {
 	}
 }
 
-bool Trie_node::member( std::string const &str, int depth ) const {
+bool Trie_node::member( std::string const &str, int depth ) const {	
+	if (depth == str.length){
+		return is_terminal;
+	}
+	int index = str2index(str[depth]);
+	if (child(index) != nullptr){
+		return child(index) -> member(str,++depth);
+	}
 	return false;
 }
 
 bool Trie_node::insert( std::string const &str, int depth ) {
+	if (depth == str.length){
+		is_terminal = true;
+		return true;
+	}
+	int index = str2index(str[depth])
+	if (child(index) == nullprtr){
+		if (children == nullptr){
+			children = new Trie_node*[CHARACTERS];		
+		}
+		child(index) = new &Trie_node();
+		return insert(str,++depth);
+	}
 	return false;
 }
 
@@ -88,8 +107,19 @@ bool Trie_node::erase( std::string const &str, int depth, Trie_node *&ptr_to_thi
 }
 
 void Trie_node::clear() {
+	if (children != nullptr){
+		for (auto c: children){
+			c->clear();
+		}
+	}
+	delete[] children;
 }
 
+int Trie_node::str2index(char &c){
+	int index = (int) c;
+	c = c - 65;
+	return index
+}
 
 // Is an error showing up in ece250.h or elsewhere?
 // Did you forget a closing '}' ?
