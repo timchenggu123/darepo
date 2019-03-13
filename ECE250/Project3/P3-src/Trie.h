@@ -70,14 +70,15 @@ trie_size( 0 ) {
 }
 
 Trie::~Trie() {
+	clear();
 }
 
 int Trie::size() const {
-	return size;
+	return trie_size;
 }
 
 bool Trie::empty() const {
-	if(size == 0){
+	if(size() == 0){
 		return true;
 	}
 	return false;
@@ -91,29 +92,54 @@ bool Trie::member( std::string const &str ) const {
 	if (root() == nullptr){
 		return false;
 	}
-	for (char &c:str){
+	std::string str1 = str;
+	for (char &c:str1){
 		c = toupper(c);
-		code = (int) c;
-		if ( c <65 || c >90){
-			return false;
-		}
-	}
-	return root_node->member(str,0);
-}
-
-bool Trie::insert( std::string const &str ) {
-	for (char &c:str){
-		c = toupper(c);
-		code = (int) c;
-		if ( c <65 || c >90){
+		int value = (int) c;
+		if ( value <65 || value >90){
 			return false;
 		}
 	}
 	
+	return root_node->member(str1,0);
+}
+
+bool Trie::insert( std::string const &str ) {
+	if (root() == nullptr){
+		root_node = new Trie_node();
+	}
+	std::string str1 = str;
+	for (char &c:str1){
+		c = toupper(c);
+		int value = (int) c;
+		if ( value <65 || value >90){
+			return false;
+		}
+	}
+	if (root() -> insert(str1,0)){
+		++trie_size;
+		return true;
+	}
 	return false;
 }
 
 bool Trie::erase( std::string const &str ) {
+	if (size() == 0){
+		return false;
+	}
+	std::string str1 = str;
+	for (char &c:str1){
+		c = toupper(c);
+		int value = (int) c;
+		if ( value <65 || value >90){
+			return false;
+		}
+	}
+	Trie_node *ptr = nullptr;
+	if (root()->erase(str1,0, ptr)){
+		trie_size= trie_size -1;
+		return true;
+	}
 	return false;
 }
 
