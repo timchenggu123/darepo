@@ -148,9 +148,8 @@ bool Trie::erase( std::string const &str ) {
 void Trie::clear() {
 	if(root()!= nullptr){
 		root() -> clear();
-		delete root_node;
-		
 	}
+	trie_size = 0;
 }
 
 // You can modify this function however you want:  it will not be tested

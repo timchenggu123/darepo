@@ -128,52 +128,53 @@ bool Trie_node::insert(std::string const &str, int depth)
 }
 
 bool Trie_node::erase(std::string const &str, int depth, Trie_node *&ptr_to_this)
-{	bool branching_node = false;
+{
 	if (depth == str.length())
 	{	
-		if (is_terminal)
-		{
-			if (children == nullptr)
-			{
-				return false;
-
-			}
-			else
-			{
-				is_terminal = false;
+		is_terminal = false;
+		// if is leaf node, delete. 
+		if (children == nullptr){
+			delete ptr_to_this;
+			ptr_to_this = nullptr;
+			return true;
+		}
+		for (int i = 0; i < CHARACTERS ; i++){
+			if (child(i) != nullptr){
 				return true;
 			}
 		}
+		delete[] children;
+		children = nullptr;
+		delete ptr_to_this;
+		ptr_to_this = nullptr;
+		return true;
 	}
+
 	int index = (int)str[depth];
 	index = index - 65;
-	if (child(index) != nullptr)
-	{
-		int count = 0;
-		for (int i = 0; i < 26; i++)
-		{
-			//check if there is a branch, if yet, save it and pass on
-			if (children[i])
-			{
-				count = count + 1;
-			}
-			if (count > 1)
-			{
-				branching_node = true; //pointer to branching point;
-			}
-		}
-		if (child(index)->erase(str, ++depth, ptr_to_this)){
-			return true;
-		}else
-		{
-			if(branching_node)	{
-				child(index) -> clear();
-				children[index] = nullptr;
+	if (child(index) != nullptr){
+		if (child(index)->erase(str, ++depth, children[index])){
+			//if the current node is a terminal node, do nothing and return
+			if (is_terminal){
 				return true;
 			}
+			// if any children found, do nothing and return
+			for (int i = 0; i < CHARACTERS ; i++){
+				if (child(i) != nullptr){
+					return true;
+				}
+			}
+
+			// if the children is empty, delete node and children[]
+			delete[] children;
+			children = nullptr;
+			delete ptr_to_this;
+			return true;
+
+		}else
+		{
 			return false;
 		}
-		;
 	}
 	return false;
 }
@@ -186,12 +187,12 @@ void Trie_node::clear()
 		{
 			if (children[i] != nullptr){
 				children[i]->clear();
-				delete children[i];
 			}
 		}
 		delete[] children;
+		children = nullptr;
 	}
-
+	delete this;
 }
 
 // Is an error showing up in ece250.h or elsewhere?
