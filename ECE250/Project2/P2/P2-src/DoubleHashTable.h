@@ -144,7 +144,7 @@ void DoubleHashTable<T >::insert( T const &obj ) {
 	while (array_state[(h1_k + i  * h2_k) % array_size] == OCCUPIED) {
 		i++;
 		if (i == array_size) {
-			std::cout<<std::string("cannot insert")<<std::endl;
+			throw overflow();
 			return;
 		}
 	}
@@ -186,7 +186,7 @@ bool DoubleHashTable<T >::remove( T const &obj ) {
 template<typename T >
 void DoubleHashTable<T >::clear() {
 	for (int i = 0; i < array_size; i++) {
-		array_state[i] == EMPTY;
+		array_state[i] = EMPTY;
 	 }
 	 count = 0;
 	 return ; 

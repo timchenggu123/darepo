@@ -93,14 +93,13 @@ bool Trie::member( std::string const &str ) const {
 		return false;
 	}
 	std::string str1 = str;
-	for (char &c:str1){
-		c = toupper(c);
-		int value = (int) c;
-		if ( value <65 || value >90){
+	for (int i = 0; i < str1.length(); i++) {
+		str1[i] = toupper(str1[i]);
+		int value = (int)str1[i];
+		if (value < 65 || value >90) {
 			throw illegal_argument();
 		}
 	}
-	
 	return root_node->member(str1,0);
 }
 
@@ -109,9 +108,9 @@ bool Trie::insert( std::string const &str ) {
 	if (root() == nullptr){
 		root_node = new Trie_node();
 	}
-	for (char &c:str1){
-		c = toupper(c);
-		int value = (int) c;
+	for (int i = 0; i < str1.length(); i++) {
+		str1[i] = toupper(str1[i]);
+		int value = (int) str1[i];
 		if ( value <65 || value >90){
 			throw illegal_argument();
 		}
@@ -128,14 +127,14 @@ bool Trie::erase( std::string const &str ) {
 		return false;
 	}
 	std::string str1 = str;
-	for (char &c:str1){
-		c = toupper(c);
-		int value = (int) c;
-		if ( value <65 || value >90){
+	for (int i = 0; i < str1.length(); i++) {
+		str1[i] = toupper(str1[i]);
+		int value = (int) str1[i];
+		if (value < 65 || value >90) {
 			throw illegal_argument();
 		}
 	}
-	if (member(str)){
+	if (member(str1)){
 		Trie_node *ptr = nullptr;
 		if (root()->erase(str1,0, ptr)){
 			trie_size= trie_size -1;
@@ -148,6 +147,7 @@ bool Trie::erase( std::string const &str ) {
 void Trie::clear() {
 	if(root()!= nullptr){
 		root() -> clear();
+		root_node = nullptr;	
 	}
 	trie_size = 0;
 }
