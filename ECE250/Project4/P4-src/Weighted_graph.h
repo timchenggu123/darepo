@@ -240,6 +240,12 @@ double Weighted_graph::minimum_spanning_tree( int n) const{
 	return MST_size;
 }
 bool Weighted_graph::is_connected() const{
+	if (mSize == 0){
+		return false;
+	}
+	if (mSize == 1){
+		return true;
+	}
 	int n =0;
 	int nNodes = 0;
 	Custom_Priority_Queue Q;
@@ -283,7 +289,7 @@ bool Weighted_graph::is_connected() const{
 }
 
 void Weighted_graph::insert( int m, int n, double w ){
-	if (m >= mSize || n >= mSize || m <0 || n < 0){
+	if (m >= mSize || n >= mSize || m <0 || n < 0 || m == n){
 		throw illegal_argument();
 	}
 	if (w < 0 || w == INF){
