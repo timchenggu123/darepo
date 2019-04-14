@@ -169,6 +169,7 @@ bool Trie_node::erase(std::string const &str, int depth, Trie_node *&ptr_to_this
 			delete[] children;
 			children = nullptr;
 			delete ptr_to_this;
+			ptr_to_this = nullptr;
 			return true;
 
 		}else
