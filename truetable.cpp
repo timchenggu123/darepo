@@ -1,12 +1,13 @@
-#include<iostream>
+#include <iostream>
 #include "operations.h"
 
+using namespace std;
 int main(int argc, char* argv[] ){
     //static variables:
-    OPERATOR_AND = 42;
-    OPERATOR_OR = 43;
-    OPERATION_AND = 0;
-    OPERATION_OR = 1;
+    const int OPERATOR_AND = 45;
+    const int OPERATOR_OR = 43;
+    const int OPERATION_AND = 0;
+    const int OPERATION_OR = 1;
 
     //variable declaration:
     int operation = -1;
@@ -16,7 +17,7 @@ int main(int argc, char* argv[] ){
         func_in[i] = 0;
     }
     //code begins
-    char* main_in = argv[0];
+    char* main_in = argv[1];
     int i = 0;
     int j = 0;
     while (main_in[i] != 0){
@@ -28,7 +29,7 @@ int main(int argc, char* argv[] ){
             case OPERATOR_OR:
                 operation = OPERATION_OR;
                 break;
-            case default:
+            default:
                 func_in[j] = ascii_code;
                 j ++;
                 break;
@@ -36,19 +37,19 @@ int main(int argc, char* argv[] ){
         i++;
     }
 
-    int func_in_size = j;
+    func_in_size = j;
 
     switch (operation){
         case OPERATION_AND:
-            function_and(func_in, func_in_size);
+            func_and(func_in, func_in_size);
             break;
         case OPERATION_OR:
-            function_or(func_in, func_in_size);
+            func_or(func_in, func_in_size);
             break;
-        case default:
+        default:
             cout<< "invalid operator"<<endl;
             break;
     }
 
-    return 0
+    return 0;       
 }
