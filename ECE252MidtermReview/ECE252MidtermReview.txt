@@ -1,0 +1,8 @@
+Code for interprocess messaging:	{Capture.PNG}
+Code for socket server side:	{Capture1.PNG}
+Code for shared memory:	{Capture2.PNG}
+Code for socket client side:	{Capture3.PNG}
+Code for sigset masking:	{Capture4.PNG}
+Code for messaging	{Capture5.PNG}
+Code for mmap	{Capture6.PNG}
+five-state model diagram	{Capture7.PNG}
